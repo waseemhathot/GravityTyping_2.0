@@ -11,3 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --app-background-color: white;
+  --app-text-color: black;
+  --app-border-color: black;
+}
