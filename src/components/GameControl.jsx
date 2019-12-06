@@ -2,21 +2,18 @@ import React from 'react';
 import GameButton from './GameButton';
 import GameSelect from './GameSelect'
 
-export default class GameControl extends React.Component {
+export default function GameControl(props) {
 
-    difficultyOptions = ['Easy', 'Normal', 'Hard']
 
-    render() {
-        return (
-            <div className="game-control">
-                <div className="game-control__item">
-                    <GameButton name="Reset"></GameButton>
-                </div>
-
-                <div className="game-control__item">
-                    <GameSelect options={this.difficultyOptions}></GameSelect>
-                </div>
+    return (
+        <div className="game-control">
+            <div className="game-control__item">
+                <GameButton name="Reset" onButtonClick={props.onResetClicked}></GameButton>
             </div>
-        );
-    }
+
+            <div className="game-control__item">
+                <GameSelect onSelectChange={props.onDifficultyChange} options={props.options}></GameSelect>
+            </div>
+        </div>
+    );
 }

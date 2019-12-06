@@ -6,7 +6,7 @@ export default function GameSelect(props) {
     const options = difficultyOptions.map((opt, index) => <option key={index} value={opt}>{opt}</option>); 
 
     return (
-        <select className="game-select" onChange={props.onChangeHandle}>
+        <select className="game-select" onChange={props.onSelectChange}>
             {options}
         </select>
     );
