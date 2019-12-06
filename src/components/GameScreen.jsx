@@ -5,7 +5,8 @@ export default function GameScreen(props) {
     return (
         <div className="game-screen">
             <GameSmartText text={props.text}
-            playerPos={props.playerPos}
+            currWordPos={props.currWordPos}
+            playerPosInWord={props.playerPosInWord}
             cmpPos={props.cmpPos} />   
         </div>
     );

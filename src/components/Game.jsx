@@ -15,7 +15,7 @@ export default class Game extends React.Component {
             gameRunning: false,
             difficultyOptions: ['Easy', 'Normal', 'Hard'],
             chosenDifficulty: 0.25,
-            playerInputTextPos: 0,
+            playerPosInWord: 0,
             currWordPos: 0,
             currInput: '',
         }
@@ -27,7 +27,7 @@ export default class Game extends React.Component {
 
     onResetClickedHandle() {
         this.setState({
-          gameRunning: false,  
+            gameRunning: false,
         })
     }
 
@@ -37,13 +37,13 @@ export default class Game extends React.Component {
             case 'Normal':
                 difficultyValue = 0.5;
                 break;
-            case 'Hard': 
+            case 'Hard':
                 difficultyValue = 1;
-                break; 
+                break;
             default:
                 difficultyValue = 0.25;
         }
-         
+
         this.setState({
             chosenDifficulty: difficultyValue,
         });
@@ -51,25 +51,44 @@ export default class Game extends React.Component {
 
     onPlayerInput(e) {
 
-        if(e.keyCode === 32) {
-            if (e.target.value === this.gameTextWords[this.state.currWordPos] + ' ') {
+        const keyCode = e.target.value.charCodeAt(e.target.value.length - 1);
+        if (keyCode === 32) {
 
+            if (e.target.value === this.gameTextWords[this.state.currWordPos] + ' ') {
                 e.target.value = '';
                 this.setState({
-                    playerInputTextPos: 0,
+                    playerPosInWord: 0,
                     currInput: '',
                     currWordPos: this.state.currWordPos + 1,
                 });
+
+                if (this.state.currWordPos === this.gameTextWords.length - 1) {
+                    this.setState({
+                        playerPosInWord: 0,
+                        currInput: '',
+                        currWordPos: 0,
+                    })
+                }
+
             }
         }
-        else{ 
-            const wordAtCurrIndex = this.gameTextWords[this.state.currWordPos].slice(0, this.state.playerInputTextPos + 1);
-            const newInput = e.target.value
-            if (newInput === wordAtCurrIndex) {
+        else {
+            const wordAtCurrIndex = this.gameTextWords[this.state.currWordPos].slice(0, this.state.playerPosInWord + 1);
+            const newInput = e.target.value;
+
+            if (newInput.length < this.state.playerPosInWord) {
                 this.setState({
-                    playerInputTextPos: this.state.playerInputTextPos + 1,
+                    playerPosInWord: newInput.length,
                     currInput: newInput,
                 });
+            }
+            else {
+                if (newInput === wordAtCurrIndex) {
+                    this.setState({
+                        playerPosInWord: this.state.playerPosInWord + 1,
+                        currInput: newInput,
+                    });
+                }
             }
         }
     }
@@ -79,13 +98,15 @@ export default class Game extends React.Component {
             <div className="game">
                 <div className="game__control game__item">
                     <GameControl options={this.state.difficultyOptions}
-                     onResetClicked={this.onResetClickedHandle}
-                     onDifficultyChange={this.onDifficultyChange} />
+                        onResetClicked={this.onResetClickedHandle}
+                        onDifficultyChange={this.onDifficultyChange} />
                 </div>
 
                 <div className="game__display game__item">
-                    <GameScreen text={this.gameText} />
-                    <GameInput onPlayerInput={this.onPlayerInput}/>
+                    <GameScreen text={this.gameText}
+                        currWordPos={this.state.currWordPos}
+                        playerPosInWord={this.state.playerPosInWord} />
+                    <GameInput onPlayerInput={this.onPlayerInput} />
                 </div>
             </div>
         );
