@@ -6,7 +6,7 @@ import GameInput from './GameInput';
 
 export default class Game extends React.Component {
 
-    gameText = 'Hi I am waseem'
+    gameText = 'It is called JSX, and it is a syntax extension to JavaScript. We recommend using it with React to describe what the UI should look like. JSX may remind you of a template language, but it comes with the full power of JavaScript.';
     gameTextWords = this.gameText.split(' ');
 
     constructor(props) {
@@ -61,15 +61,6 @@ export default class Game extends React.Component {
                     currInput: '',
                     currWordPos: this.state.currWordPos + 1,
                 });
-
-                if (this.state.currWordPos === this.gameTextWords.length - 1) {
-                    this.setState({
-                        playerPosInWord: 0,
-                        currInput: '',
-                        currWordPos: 0,
-                    })
-                }
-
             }
         }
         else {
@@ -88,6 +79,18 @@ export default class Game extends React.Component {
                         playerPosInWord: this.state.playerPosInWord + 1,
                         currInput: newInput,
                     });
+
+                    const lastWordIndex = this.gameTextWords.length - 1;
+                    const lastCharInWordIndex = this.gameTextWords[this.state.currWordPos].length - 1;
+                    if (this.state.currWordPos === lastWordIndex && this.state.playerPosInWord === lastCharInWordIndex) {
+
+                        e.target.value = '';
+                        this.setState({
+                            playerPosInWord: 0,
+                            currInput: '',
+                            currWordPos: 0,
+                        })
+                    }
                 }
             }
         }

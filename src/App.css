@@ -140,7 +140,6 @@
   width: 80%;
   padding: calc(0.5em + 0.2em);
   outline: none;
-  text-align: center;
   font-size: calc(1.3em + 0.2em);
   box-sizing: border-box;
 }
@@ -148,10 +147,14 @@
 /* GameSmartText */
 
 .game-smart-text {
-  width: 60%;
-  text-align: center;
+  /* text-align: center; */
   font-size: calc(1.2em + 0.2em);
   font-weight: bold;
+  display: flex; 
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding: calc(0.5em + 0.2vmax);
 }
 
 .progress-color {
