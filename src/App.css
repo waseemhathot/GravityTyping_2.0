@@ -147,7 +147,6 @@
 /* GameSmartText */
 
 .game-smart-text {
-  /* text-align: center; */
   font-size: calc(1.2em + 0.2em);
   font-weight: bold;
   display: flex; 
