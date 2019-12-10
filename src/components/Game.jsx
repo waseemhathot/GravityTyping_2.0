@@ -15,7 +15,6 @@ export default class Game extends React.Component {
         super(props);
         this.state = {
             gameRunning: false,
-            playerWonGame: false,
             difficultyOptions: ['Easy', 'Normal', 'Hard'],
             chosenDifficulty: 500,
             playerPosInWord: 0,
@@ -31,9 +30,7 @@ export default class Game extends React.Component {
     }
 
     onResetClickedHandle() {
-        this.setState({
-            gameRunning: false,
-        })
+        this.endGame();
     }
 
     onDifficultyChange(e) {
@@ -109,18 +106,10 @@ export default class Game extends React.Component {
     }
 
     computerWonGame() {
-        this.setState({
-            computerWonGame: true,
-            playerWonGame: false,
-        }); 
         console.log('computer won');  
     }
 
     playerWonGame() {
-        this.setState({
-            playerWonGame: true,
-            computerWonGame: false,
-        });
         console.log('i won');
     }
 
