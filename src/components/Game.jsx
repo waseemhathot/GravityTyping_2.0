@@ -6,17 +6,16 @@ import GameInput from './GameInput';
 
 export default class Game extends React.Component {
 
-    // gameText = 'It is called JSX, and it is a syntax extension to JavaScript. We recommend using it with React to describe what the UI should look like. JSX may remind you of a template language, but it comes with the full power of JavaScript.';
-    gameText = 'It is called JSX, and it is a syntax extension to JavaScript.';
+    gameText = 'It is called JSX, and it is a syntax extension to JavaScript. We recommend using it with React to describe what the UI should look like. JSX may remind you of a template language, but it comes with the full power of JavaScript.';
     gameTextWords = this.gameText.split(' ');
-    computerTypingInterval; //incase player won, we need to clear it.
+    computerTypingInterval; //in case player won, we need to clear it.
 
     constructor(props) {
         super(props);
         this.state = {
             gameRunning: false,
             difficultyOptions: ['Easy', 'Normal', 'Hard'],
-            chosenDifficulty: 500,
+            chosenDifficulty: 400,
             playerPosInWord: 0,
             playerWordPos: 0,
             currInput: '',
@@ -37,13 +36,16 @@ export default class Game extends React.Component {
         let difficultyValue = 0;
         switch (e.target.value) {
             case 'Normal':
-                difficultyValue = 50;
+                this.onResetClickedHandle();
+                difficultyValue = 200;
                 break;
             case 'Hard':
-                difficultyValue = 10;
+                this.onResetClickedHandle();
+                difficultyValue = 150;
                 break;
             default:
-                difficultyValue = 100;
+                this.onResetClickedHandle()
+                difficultyValue = 300;
         }
 
         this.setState({
