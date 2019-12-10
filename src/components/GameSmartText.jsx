@@ -3,7 +3,8 @@ import ReactHtmlParser from 'react-html-parser';
 
 export default function GameSmartText(props) {
 
-    const coloredText = colorText(props.text, props.currWordPos, props.playerPosInWord);
+    const coloredText = colorText(props.text, props.playerWordPos, props.playerPosInWord,
+        props.computerWordPos, props.computerPosInWord);
     
     return (
         <div className="game-smart-text">{ReactHtmlParser(coloredText)}</div>
@@ -11,28 +12,45 @@ export default function GameSmartText(props) {
 }
 
 
-function colorText(text, wordIndex, posInWord) {
+function colorText(text, playerWordPos, playerPosInWord, computerWordPos, computerPosInWord) {
 
     const words = text.split(' ');
-
     let coloredText = '<span><span class="progress-color">';
-    words.map((word, index) => {
+    for(let i = 0; i < words.length; i++) {
 
-        if (wordIndex === index) {
-            coloredText += words[wordIndex].slice(0, posInWord) + '</span>' + words[wordIndex].slice(posInWord);
-           
-        } else{
-            coloredText += word;
+        const currWord = words[i];
+        if (i === playerWordPos && i !== computerWordPos) {
+            coloredText += `${currWord.slice(0,playerPosInWord)}</span>${currWord.slice(playerPosInWord)}`;
+        }
+        else if (i !== playerWordPos && i === computerWordPos) {
+            coloredText += `<span class="cmp-progress-color">${currWord.slice(0,computerPosInWord)}`
+            + `</span>${currWord.slice(computerPosInWord)}`;
+        }
+        else if (i === playerWordPos && i === computerWordPos) { 
+            if (playerPosInWord > computerPosInWord) {
+                coloredText += `<span class="cmp-progress-color">${currWord.slice(0,computerPosInWord)}</span>`
+                + `${currWord.slice(computerPosInWord, playerPosInWord)}</span>`
+                + currWord.slice(playerPosInWord);
+            }
+            else if(playerPosInWord < computerPosInWord) {
+                coloredText += `${currWord.slice(0,playerPosInWord)}</span>`
+                + `<span class="cmp-progress-color">${currWord.slice(playerPosInWord, computerPosInWord )}</span>`
+                + currWord.slice(computerPosInWord);
+            }
+            else {
+                coloredText += '<span class="cmp-progress-color">'
+                + `${currWord.slice(0,computerPosInWord)}</span></span>`
+                + `${currWord.slice(computerPosInWord)}`;
+            }
+        }
+        else {
+            coloredText += currWord;
         }
 
-        if(index !== words.length - 1) {
-            coloredText += ' ';
-        } else {
-            coloredText +='</span>';
-        }
+        i === words.length - 1 ? coloredText += '' : coloredText += ' ';
 
-        return word;
-    });
-
+    }
+    
+    coloredText += '</span>';
     return coloredText;
 }

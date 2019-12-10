@@ -160,3 +160,7 @@
 .progress-color {
   color: var(--app-progross-color);
 }
+
+.cmp-progress-color {
+  color: blue;
+}
