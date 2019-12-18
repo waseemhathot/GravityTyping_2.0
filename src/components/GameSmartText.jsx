@@ -48,7 +48,6 @@ function colorText(text, playerWordPos, playerPosInWord, computerWordPos, comput
         }
 
         i === words.length - 1 ? coloredText += '' : coloredText += ' ';
-
     }
     
     coloredText += '</span>';

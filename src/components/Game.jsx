@@ -2,6 +2,7 @@ import React from 'react';
 import GameControl from './GameControl';
 import GameScreen from './GameScreen';
 import GameInput from './GameInput';
+import moment from 'moment';
 
 
 export default class Game extends React.Component {
@@ -9,11 +10,15 @@ export default class Game extends React.Component {
     gameText = 'It is called JSX, and it is a syntax extension to JavaScript. We recommend using it with React to describe what the UI should look like. JSX may remind you of a template language, but it comes with the full power of JavaScript.';
     gameTextWords = this.gameText.split(' ');
     computerTypingInterval; //in case player won, we need to clear it.
+    gameStartingTime = moment();
+    secondsInMin = 60;
 
     constructor(props) {
         super(props);
         this.state = {
             gameRunning: false,
+            gameOver: false,
+            playerWon: false,
             difficultyOptions: ['Easy', 'Normal', 'Hard'],
             chosenDifficulty: 400,
             playerPosInWord: 0,
@@ -21,6 +26,7 @@ export default class Game extends React.Component {
             currInput: '',
             computerPosInWord: 0,
             computerWordPos: 0,
+            wpm: 0,
         }
 
         this.onResetClickedHandle = this.onResetClickedHandle.bind(this);
@@ -30,6 +36,10 @@ export default class Game extends React.Component {
 
     onResetClickedHandle() {
         this.endGame();
+        this.setState({
+            gameOver: false,
+            playerWon: false,
+        })
     }
 
     onDifficultyChange(e) {
@@ -66,14 +76,14 @@ export default class Game extends React.Component {
         this.setState({
             gameRunning: true,
         });
-
         this.startComputerTypingInterval();
+        this.gameStartingTime = moment();
     }
 
     startComputerTypingInterval() {
 
         this.computerTypingInterval = setInterval(() => {
-            
+
             if (this.state.computerPosInWord ===
                 this.gameTextWords[this.state.computerWordPos].length) {
 
@@ -87,7 +97,7 @@ export default class Game extends React.Component {
                         computerPosInWord: 0,
                     });
                 }
-            } 
+            }
             else {
                 this.setState({
                     computerPosInWord: this.state.computerPosInWord + 1,
@@ -108,26 +118,39 @@ export default class Game extends React.Component {
     }
 
     computerWonGame() {
-        console.log('computer won');  
+        this.setState({
+            gameOver: true,
+        });
     }
 
     playerWonGame() {
-        console.log('i won');
+        this.setState({
+            gameOver: true,
+            playerWon: true,
+        });
     }
 
     updateStateForSpaceInput(e) {
         if (e.target.value === this.gameTextWords[this.state.playerWordPos] + ' ') {
             
+            const timePassedInSeconds = moment().diff(this.gameStartingTime, 'seconds');
+
             e.target.value = '';
             this.setState({
                 playerPosInWord: 0,
                 currInput: '',
                 playerWordPos: this.state.playerWordPos + 1,
-            });  
+                wpm: Math.round((this.state.playerWordPos + 2) / (timePassedInSeconds / this.secondsInMin)),
+            });
+            // console.log('seconds passed ', this.gameStartingTime.seconds());
+            // console.log('minutes passed ', moment().diff(this.gameStartingTime, 'seconds') / this.secondsInMin);
+            // console.log('words typed ', this.state.playerWordPos + 1);
+            // console.log('wpm ', this.state.wpm);
         }
     }
 
     updateStateForInput(e) { //for input that is a space
+
         const wordAtCurrIndex = this.gameTextWords[this.state.playerWordPos].slice(0, this.state.playerPosInWord + 1);
         const newInput = e.target.value;
 
@@ -152,10 +175,11 @@ export default class Game extends React.Component {
                     this.playerWonGame();
                 }
             }
-        }
+        } 
     }
 
     render() {
+
         return (
             <div className="game">
                 <div className="game__control game__item">
@@ -169,7 +193,11 @@ export default class Game extends React.Component {
                         playerWordPos={this.state.playerWordPos}
                         playerPosInWord={this.state.playerPosInWord}
                         computerWordPos={this.state.computerWordPos}
-                        computerPosInWord={this.state.computerPosInWord} />
+                        computerPosInWord={this.state.computerPosInWord}
+                        gameOver={this.state.gameOver}
+                        playerWon={this.state.playerWon}
+                        wpm={this.state.wpm}
+                    />
                     <GameInput onPlayerInput={this.onPlayerInput} />
                 </div>
             </div>

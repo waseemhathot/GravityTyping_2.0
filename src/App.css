@@ -29,7 +29,6 @@
   margin: 3%;
 }
 
-
 @media (max-width: 700px) {
   .game {
     display: flex;
