@@ -1,4 +1,6 @@
 import React from 'react';
+
+import GameDescription from './GameDescription'
 import GameControl from './GameControl';
 import GameScreen from './GameScreen';
 import GameInput from './GameInput';
@@ -56,7 +58,7 @@ export default class Game extends React.Component {
             default:
                 this.onResetClickedHandle()
                 difficultyValue = 300;
-        }
+        };
 
         this.setState({
             chosenDifficulty: difficultyValue,
@@ -132,7 +134,7 @@ export default class Game extends React.Component {
 
     updateStateForSpaceInput(e) {
         if (e.target.value === this.gameTextWords[this.state.playerWordPos] + ' ') {
-            
+
             const timePassedInSeconds = moment().diff(this.gameStartingTime, 'seconds');
 
             e.target.value = '';
@@ -142,10 +144,6 @@ export default class Game extends React.Component {
                 playerWordPos: this.state.playerWordPos + 1,
                 wpm: Math.round((this.state.playerWordPos + 2) / (timePassedInSeconds / this.secondsInMin)),
             });
-            // console.log('seconds passed ', this.gameStartingTime.seconds());
-            // console.log('minutes passed ', moment().diff(this.gameStartingTime, 'seconds') / this.secondsInMin);
-            // console.log('words typed ', this.state.playerWordPos + 1);
-            // console.log('wpm ', this.state.wpm);
         }
     }
 
@@ -175,7 +173,7 @@ export default class Game extends React.Component {
                     this.playerWonGame();
                 }
             }
-        } 
+        }
     }
 
     render() {
@@ -189,6 +187,8 @@ export default class Game extends React.Component {
                 </div>
 
                 <div className="game__display game__item">
+
+
                     <GameScreen text={this.gameText}
                         playerWordPos={this.state.playerWordPos}
                         playerPosInWord={this.state.playerPosInWord}
@@ -198,7 +198,11 @@ export default class Game extends React.Component {
                         playerWon={this.state.playerWon}
                         wpm={this.state.wpm}
                     />
+
                     <GameInput onPlayerInput={this.onPlayerInput} />
+
+                    <GameDescription></GameDescription>
+
                 </div>
             </div>
         );
